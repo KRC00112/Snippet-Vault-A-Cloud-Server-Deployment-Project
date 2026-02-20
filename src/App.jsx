@@ -5,17 +5,68 @@ import {useState} from "react";
 
 
 
-function AllSnippets({snippets}) {
+function SnippetCardList({list,removeCard}){
 
+
+
+
+    return(
+        <>
+
+        {list.map((obj) => (
+            <div key={obj.id} className="card right-card">
+                <div>{obj.title}[{obj.language}]</div>
+
+                <div className='right-card-snippet'>{obj.code}</div>
+                <div className='snippet-operations'>
+                    <button>copy</button>
+                    <button onClick={()=>{removeCard(obj.id)}}>delete</button>
+                </div>
+            </div>
+
+
+        ))}
+
+    </>
+
+    );
+
+}
+
+
+function AllSnippets({snippets,languageList,removeCard}) {
+
+
+
+    const [selectedLanguageTag, setSelectedLanguageTag] = useState('all');
+    const taggedSnippets=snippets.filter(obj=>obj.language===selectedLanguageTag)
 
     return (
         <div className="">
-            {snippets.map((item, index) => (
-                <div key={item.id} className="card right-card">
-                    {item.title}[{item.language}]
-                    {item.code}
+            <div className='all-tags'>
+                <button className='all-btn' onClick={()=>{setSelectedLanguageTag('all')}}>All</button>
+                <div className='language-tags'>
+                    {languageList.slice(1,).map((language) => (
+                        <li key={language}><button onClick={()=>{setSelectedLanguageTag(language)}}>{language}</button></li>
+                    ))}
                 </div>
-            ))}
+
+
+
+            </div>
+
+
+            <div>
+
+
+
+                {selectedLanguageTag!=='all' && <SnippetCardList list={taggedSnippets} removeCard={removeCard}/>}
+                {selectedLanguageTag==='all' && <SnippetCardList list={snippets} removeCard={removeCard}/>}
+
+
+
+            </div>
+
 
         </div>
     )
@@ -47,12 +98,17 @@ function AddSnippet({languageList, addSnippetOnClick}){
 
 function App() {
 
-    const languageList=['Select a language','HTML', 'CSS', 'JavaScript', 'Python', 'C++', 'C'];
+    let languageList=['Select a language','HTML', 'CSS', 'JavaScript', 'Python', 'C++', 'C'];
 
     const [snippets,setSnippets]=useState([]);
 
+    const removeCard=(id)=>{
+        setSnippets(prev=>prev.filter(item=>item.id!==id))
+    }
+
+
     const addSnippetOnClick=(item)=>{
-        if(item.language!==languageList[0]) {
+        if(item.language!==languageList[0] && item.title!=="" && item.code!=="") {
             setSnippets(prev => [...prev, item]);
         }
     }
@@ -68,7 +124,7 @@ function App() {
                 <AddSnippet addSnippetOnClick={addSnippetOnClick} languageList={languageList}/>
             </section>
             <section className='right-section'>
-                <AllSnippets snippets={snippets}/>
+                <AllSnippets snippets={snippets} languageList={languageList} removeCard={removeCard}/>
             </section>
         </section>
 

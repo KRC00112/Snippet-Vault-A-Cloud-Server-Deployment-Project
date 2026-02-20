@@ -28,7 +28,7 @@ header{
   width: 100%;
 }
 .right-section{
-  width: 100vw;
+  width: 800px;
 }
 .card{
   display: flex;
@@ -90,6 +90,24 @@ header{
 
 }
 
-.card-border{
-  border: 2px solid #000000;
+
+
+.all-tags{
+  display: flex;
+  align-items: stretch;
+
+}
+.language-tags{
+  list-style: none;
+  display: flex;
+}
+.language-tags li{
+  display: flex;
+  align-items: stretch;
+}
+
+.right-card-snippet{
+  height: 100px;
+  word-wrap: break-word;
+  overflow-y: auto;
 }
