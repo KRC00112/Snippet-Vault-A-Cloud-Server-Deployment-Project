@@ -89,7 +89,7 @@ function AddSnippet({languageList, addSnippetOnClick, focused, handleFocus}){
         <div className='card add-snippet-card'>
             <p className='add-snippet-heading'>NEW SNIPPET</p>
             <input type='text' className={`card-inputs ${focused==='title'?'clicked':''}`} onFocus={()=>{handleFocus('title')}} onBlur={()=>{handleFocus('')}} placeholder='Give snippet a title' value={title}  onChange={(e)=>{setTitle(e.target.value)}}></input>
-            <select className={`card-inputs ${focused==='language'?'clicked':''}`} onFocus={()=>{handleFocus('language')}} onBlur={()=>{handleFocus('')}}  name="languages" value={language} onChange={(e)=>{setLanguage(e.target.value)}}>
+            <select className={`card-inputs language-drop-down ${focused==='language'?'clicked':''}`} onFocus={()=>{handleFocus('language')}} onBlur={()=>{handleFocus('')}}  name="languages" value={language} onChange={(e)=>{setLanguage(e.target.value)}}>
                 {languageList.map((item,index) => (
                     <option key={index} >{item}</option>
                 ))}

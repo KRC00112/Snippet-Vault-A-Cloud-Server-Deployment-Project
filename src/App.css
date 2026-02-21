@@ -125,6 +125,10 @@ header{
   transition: 0.2s ease-in-out;
 }
 
+.language-drop-down{
+  cursor: pointer;
+}
+
 .clicked{
 
   transform: translate(-1px, -1px);
