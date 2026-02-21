@@ -76,6 +76,15 @@ function AddSnippet({languageList, addSnippetOnClick, focused, handleFocus}){
     const [language, setLanguage] = useState(languageList[0]);
     const [code, setCode] = useState('');
 
+    const handleAddSnippetBtnClick = ()=>{
+
+        addSnippetOnClick({id:Date.now(),title:title,language:language,code:code})
+        setTitle('')
+        setLanguage(languageList[0]);
+        setCode('')
+
+    }
+
     return(
         <div className='card add-snippet-card'>
             <p className='add-snippet-heading'>NEW SNIPPET</p>
@@ -86,7 +95,7 @@ function AddSnippet({languageList, addSnippetOnClick, focused, handleFocus}){
                 ))}
             </select>
             <textarea className={`input-snippet card-inputs ${focused==='snippet'?'clicked':''}`} onFocus={()=>{handleFocus('snippet')}} onBlur={()=>{handleFocus('')}} placeholder='Paste your snippet here...' rows={10} value={code} onChange={(e)=>{setCode(e.target.value)}}></textarea>
-            <button className='add-snippet-btn card' onClick={()=>addSnippetOnClick({id:Date.now(),title:title,language:language,code:code})}>+ ADD SNIPPET</button>
+            <button className='add-snippet-btn card' onClick={()=>handleAddSnippetBtnClick()}>+ ADD SNIPPET</button>
         </div>
     );
 }
