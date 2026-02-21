@@ -39,15 +39,14 @@ function SnippetCardList({list,removeCard}){
 }
 
 
-function AllSnippets({snippets,languageList,removeCard,query,onChangeQuery}) {
+function AllSnippets({snippets,languageList,removeCard,query,onChangeQuery,focused,handleFocus}) {
     const [selectedLanguageTag, setSelectedLanguageTag] = useState('all');
 
     const filteredList=query?snippets.filter(snippet=>snippet.title.toLowerCase().includes(query.toLowerCase())):snippets;
     const displayList=selectedLanguageTag==='all'?filteredList:filteredList.filter(snippet=>snippet.language===selectedLanguageTag)
-
     return (
         <>
-            <input type='text' className='card-inputs' placeholder='Search snippets...' value={query} onChange={(e)=>{onChangeQuery(e)}}></input>
+            <input type='text' className={`card-inputs ${focused==='search'?'clicked':''}`} onFocus={()=>{handleFocus('search')}} onBlur={()=>{handleFocus('')}} placeholder='Search snippets...' value={query} onChange={(e)=>{onChangeQuery(e)}}></input>
             <div className='all-tags'>
                 <button className={`card tag-btns ${selectedLanguageTag==='all'?'selected-snippet':''}`} onClick={()=>{setSelectedLanguageTag('all')}}>All</button>
                 <ul className='language-tags'>
@@ -72,20 +71,21 @@ function AllSnippets({snippets,languageList,removeCard,query,onChangeQuery}) {
     )
 }
 
-function AddSnippet({languageList, addSnippetOnClick}){
+function AddSnippet({languageList, addSnippetOnClick, focused, handleFocus}){
     const [title, setTitle] = useState('')
     const [language, setLanguage] = useState(languageList[0]);
     const [code, setCode] = useState('');
+
     return(
         <div className='card add-snippet-card'>
             <p className='add-snippet-heading'>NEW SNIPPET</p>
-            <input type='text' className='card-inputs' placeholder='Give snippet a title' value={title} onChange={(e)=>{setTitle(e.target.value)}}></input>
-            <select className='card-inputs' name="languages" value={language} onChange={(e)=>{setLanguage(e.target.value)}}>
+            <input type='text' className={`card-inputs ${focused==='title'?'clicked':''}`} onFocus={()=>{handleFocus('title')}} onBlur={()=>{handleFocus('')}} placeholder='Give snippet a title' value={title}  onChange={(e)=>{setTitle(e.target.value)}}></input>
+            <select className={`card-inputs ${focused==='language'?'clicked':''}`} onFocus={()=>{handleFocus('language')}} onBlur={()=>{handleFocus('')}}  name="languages" value={language} onChange={(e)=>{setLanguage(e.target.value)}}>
                 {languageList.map((item,index) => (
                     <option key={index} >{item}</option>
                 ))}
             </select>
-            <textarea className='input-snippet card-inputs' placeholder='Paste your snippet here...' rows={10} value={code} onChange={(e)=>{setCode(e.target.value)}}></textarea>
+            <textarea className={`input-snippet card-inputs ${focused==='snippet'?'clicked':''}`} onFocus={()=>{handleFocus('snippet')}} onBlur={()=>{handleFocus('')}} placeholder='Paste your snippet here...' rows={10} value={code} onChange={(e)=>{setCode(e.target.value)}}></textarea>
             <button className='add-snippet-btn card' onClick={()=>addSnippetOnClick({id:Date.now(),title:title,language:language,code:code})}>+ ADD SNIPPET</button>
         </div>
     );
@@ -93,9 +93,15 @@ function AddSnippet({languageList, addSnippetOnClick}){
 
 function App() {
 
+
     let languageList=['Select a language','HTML', 'CSS', 'JavaScript', 'Python', 'C++', 'C'];
     const [snippets,setSnippets]=useState([]);
     const [query, setQuery] = useState('');
+    const [focused, setFocused] = useState('');
+
+    const handleFocus=(comp)=>{
+        setFocused(comp)
+    }
 
     const onChangeQuery=(e)=>{
         setQuery(e.target.value)
@@ -119,10 +125,10 @@ function App() {
         </header>
         <section className='workspace'>
             <section className='left-section'>
-                <AddSnippet addSnippetOnClick={addSnippetOnClick} languageList={languageList}/>
+                <AddSnippet addSnippetOnClick={addSnippetOnClick} languageList={languageList} focused={focused} handleFocus={handleFocus}/>
             </section>
             <section className='right-section'>
-                <AllSnippets snippets={snippets} languageList={languageList} removeCard={removeCard} query={query} onChangeQuery={onChangeQuery}/>
+                <AllSnippets snippets={snippets} languageList={languageList} removeCard={removeCard} query={query} onChangeQuery={onChangeQuery} focused={focused} handleFocus={handleFocus}/>
             </section>
         </section>
     </div>

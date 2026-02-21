@@ -87,6 +87,9 @@ header{
 .add-snippet-card{
   background-color: #c6a3fd;
   width:250px;
+  @media(max-width: 800px){
+    width:150px;
+  }
 
 }
 .add-snippet-heading{
@@ -114,7 +117,17 @@ header{
   padding: 10px;
   border-radius: 5px;
   border: 2px solid #000000;
+  outline: none;
+  transition: 0.2s ease-in-out;
 }
+
+.clicked{
+
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
+
+}
+
 
 .input-snippet{
   resize: none;
@@ -132,12 +145,14 @@ header{
   display: flex;
   /*background-color: #ea2929;*/
   margin-bottom: 10px;
+  flex-wrap: wrap;
 
 }
 .language-tags{
   display: flex;
   list-style: none;
   /*background-color: #2966ea;*/
+  flex-wrap: wrap;
 }
 .language-tags li{
   display: flex;
@@ -153,8 +168,14 @@ header{
   padding-block: 3px;
   box-shadow: 2px 2px 0px #000000;
   background-color: #ffffff;
+  transition:0.2s ease-in-out;
 
 
+}
+
+.tag-btns:hover:not(.selected-snippet){
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
 }
 
 
