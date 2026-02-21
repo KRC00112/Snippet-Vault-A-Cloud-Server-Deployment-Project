@@ -25,7 +25,7 @@ function SnippetCardList({list,removeCard}){
                         <div className='right-card-title-label'>{obj.title}</div>
                         <div className='right-card-language-label'>{obj.language}</div>
                     </div>
-                    <div>{formattedDate(new Date(obj.id))}</div>
+                    <div className='date'>{formattedDate(new Date(obj.id))}</div>
                 </div>
                 <div className='right-card-snippet'>{obj.code}</div>
                 <div className='snippet-operations'>
@@ -56,6 +56,13 @@ function AllSnippets({snippets,languageList,removeCard,query,onChangeQuery}) {
             <div>
                 {selectedLanguageTag!=='all' && <SnippetCardList list={taggedSnippets} removeCard={removeCard}/>}
                 {selectedLanguageTag==='all' && <SnippetCardList list={snippets} removeCard={removeCard}/>}
+                {/*<div className='card placeholder'>*/}
+                {/*        <div className='placeholder-logo'>{`\{ \}`}</div>*/}
+                {/*        <div className='placeholder-message'>*/}
+                {/*            <span>NO SNIPPETS HERE!</span>*/}
+                {/*        </div>*/}
+                {/*</div>*/}
+
             </div>
         </>
     )
@@ -101,7 +108,10 @@ function App() {
   return (
     <div className='page'>
         <header>
-            <div>Snippet Vault</div>
+            <div className='header-left'>
+                <span className='header-icon'>{'</>'}</span>
+                <span className='header-name'>Snippet Vault</span>
+            </div>
             <label className='snippets-count-label'>{snippets.length} SNIPPET{snippets.length===1?'':'S'}</label>
         </header>
         <section className='workspace'>
