@@ -103,7 +103,7 @@ function AddSnippet({languageList, addSnippetOnClick, focused, handleFocus}){
 function App() {
 
 
-    let languageList=['Select a language','HTML', 'CSS', 'JavaScript', 'Python', 'C++', 'C'];
+    let languageList = ['Select a language','JavaScript','Python','Java','C#','C','C++','TypeScript','PHP','Go','Swift'];
     const [snippets,setSnippets]=useState([]);
     const [query, setQuery] = useState('');
     const [focused, setFocused] = useState('');
