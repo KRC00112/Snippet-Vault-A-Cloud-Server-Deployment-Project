@@ -149,10 +149,15 @@ Where `assets/` contains the compiled output:
 assets/index.css    assets/index.js
 ```
 
-`index.html` is the entry point — the browser automatically loads the CSS and JS bundle from there.
+`index.html` is the entry point. The browser automatically loads the CSS and JS bundle from there.
 
 > 🔐 Files in `/usr/share/nginx/html/` are owned by root. Always use `sudo` when writing here, otherwise changes will fail silently or end up in the wrong location.
 
 No Nginx restart is required after deploying files. **Changes are served immediately.**
+
+---
+
+## 📸 Screenshots
+
 
 ---
