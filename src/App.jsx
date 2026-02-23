@@ -2,10 +2,13 @@
 import './App.css'
 import {useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 
 function SnippetCardList({list,removeCard}){
-
 
     const formattedDate=(date)=>{
         return date.toLocaleDateString("en-GB",{
@@ -28,8 +31,8 @@ function SnippetCardList({list,removeCard}){
                 </div>
                 <pre className='right-card-snippet'>{obj.code}</pre>
                 <div className='snippet-operations'>
-                    <button className='copy-btn' onClick={() => navigator.clipboard.writeText(obj.code)}>⧉ COPY</button>
-                    <button className='delete-btn' onClick={()=>{removeCard(obj.id)}}>✕ DELETE</button>
+                    <button className='copy-btn' onClick={() => {navigator.clipboard.writeText(obj.code); toast.success('Snippet copied')}}>⧉ COPY</button>
+                    <button className='delete-btn' onClick={()=>{removeCard(obj.id);toast.error("Snippet deleted")}}>✕ DELETE</button>
                 </div>
             </div>
         ))}
@@ -70,30 +73,27 @@ function AllSnippets({snippets,languageList,removeCard,query,onChangeQuery,focus
     )
 }
 
-function AddSnippet({languageList, addSnippetOnClick, focused, handleFocus}){
-    const [title, setTitle] = useState('')
-    const [language, setLanguage] = useState(languageList[0]);
-    const [code, setCode] = useState('');
+function AddSnippet({handleSetTitle, handleSetLanguage , handleSetCode, title, language, code, languageList, addSnippetOnClick, focused, handleFocus}){
+
 
     const handleAddSnippetBtnClick = ()=>{
 
         addSnippetOnClick({id:Date.now(),title:title,language:language,code:code})
-        setTitle('')
-        setLanguage(languageList[0]);
-        setCode('')
+
+
 
     }
 
     return(
         <div className='card add-snippet-card'>
             <p className='add-snippet-heading'>NEW SNIPPET</p>
-            <input type='text' className={`card-inputs ${focused==='title'?'clicked':''}`} onFocus={()=>{handleFocus('title')}} onBlur={()=>{handleFocus('')}} placeholder='Give snippet a title' value={title}  onChange={(e)=>{setTitle(e.target.value)}}></input>
-            <select className={`card-inputs language-drop-down ${focused==='language'?'clicked':''}`} onFocus={()=>{handleFocus('language')}} onBlur={()=>{handleFocus('')}}  name="languages" value={language} onChange={(e)=>{setLanguage(e.target.value)}}>
+            <input type='text' className={`card-inputs ${focused==='title'?'clicked':''}`} onFocus={()=>{handleFocus('title')}} onBlur={()=>{handleFocus('')}} placeholder='Give snippet a title' value={title}  onChange={(e)=>{handleSetTitle(e)}}></input>
+            <select className={`card-inputs language-drop-down ${focused==='language'?'clicked':''}`} onFocus={()=>{handleFocus('language')}} onBlur={()=>{handleFocus('')}}  name="languages" value={language} onChange={(e)=>{handleSetLanguage(e)}}>
                 {languageList.map((item,index) => (
                     <option key={index} >{item}</option>
                 ))}
             </select>
-            <textarea className={`input-snippet card-inputs ${focused==='snippet'?'clicked':''}`} onFocus={()=>{handleFocus('snippet')}} onBlur={()=>{handleFocus('')}} placeholder='Paste your snippet here...' rows={10} value={code} onChange={(e)=>{setCode(e.target.value)}}></textarea>
+            <textarea className={`input-snippet card-inputs ${focused==='snippet'?'clicked':''}`} onFocus={()=>{handleFocus('snippet')}} onBlur={()=>{handleFocus('')}} placeholder='Paste your snippet here...' rows={20} value={code} onChange={(e)=>{handleSetCode(e)}}></textarea>
             <button className='add-snippet-btn card' onClick={()=>handleAddSnippetBtnClick()}>+ ADD SNIPPET</button>
         </div>
     );
@@ -106,6 +106,9 @@ function App() {
     const [snippets,setSnippets]=useLocalStorage('snippets',[]);
     const [query, setQuery] = useState('');
     const [focused, setFocused] = useState('');
+    const [title, setTitle] = useState('')
+    const [language, setLanguage] = useState(languageList[0]);
+    const [code, setCode] = useState('');
 
     const handleFocus=(comp)=>{
         setFocused(comp)
@@ -120,8 +123,22 @@ function App() {
     const addSnippetOnClick=(item)=>{
         if(item.language!==languageList[0] && item.title!=="" && item.code!=="") {
             setSnippets(prev => [...prev, item]);
+            setTitle('')
+            setLanguage(languageList[0]);
+            setCode('')
         }
     }
+
+    const handleSetTitle=(e)=>{
+        setTitle(e.target.value)
+    }
+    const handleSetLanguage=(e)=>{
+        setLanguage(e.target.value)
+    }
+    const handleSetCode=(e)=>{
+        setCode(e.target.value)
+    }
+
   return (
     <div className='page'>
         <header>
@@ -133,11 +150,32 @@ function App() {
         </header>
         <section className='workspace'>
             <section className='left-section'>
-                <AddSnippet addSnippetOnClick={addSnippetOnClick} languageList={languageList} focused={focused} handleFocus={handleFocus}/>
+                <AddSnippet handleSetTitle={handleSetTitle}
+                            handleSetLanguage={handleSetLanguage}
+                            handleSetCode={handleSetCode}
+                            title={title} language={language}
+                            code={code} addSnippetOnClick={addSnippetOnClick}
+                            languageList={languageList}
+                            focused={focused}
+                            handleFocus={handleFocus}/>
             </section>
             <section className='right-section'>
-                <AllSnippets snippets={snippets} languageList={languageList} removeCard={removeCard} query={query} onChangeQuery={onChangeQuery} focused={focused} handleFocus={handleFocus}/>
+                <AllSnippets snippets={snippets}
+                             languageList={languageList}
+                             removeCard={removeCard}
+                             query={query}
+                             onChangeQuery={onChangeQuery}
+                             focused={focused}
+                             handleFocus={handleFocus}/>
             </section>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={2000}
+                theme="dark"
+                hideProgressBar={true}
+                toastClassName="custom-toast"
+                progressClassName="custom-toast-progress"
+            />
         </section>
     </div>
   )
