@@ -1,4 +1,4 @@
-# 📦 Snippet Vault — Cloud Deployment Project
+# 🔐☁ Snippet Vault — Cloud Deployment Project
 
 A code snippet manager app deployed on AWS EC2, served over HTTPS at a custom domain. The stack uses **Nginx** as the web server, **Duck DNS** for a free subdomain, and **Let's Encrypt** (via Certbot) for a trusted SSL/TLS certificate.
 
@@ -170,3 +170,34 @@ No Nginx restart is required after deploying files. **Changes are served immedia
 </table>
 
 ---
+
+## ⚠️ Notes
+
+- 🛡️ **HTTPS requires two things:** an open port 443 in the EC2 security group **and** a valid SSL/TLS certificate configured in Nginx. Opening the port alone is not sufficient.
+
+- 🔄 **EC2 Public IPs are ephemeral.** The public IPv4 address changes every time the instance is stopped and restarted. After a reboot, the Duck DNS record must be manually updated with the new IP. For a persistent setup, attach an AWS Elastic IP to the instance.
+
+- 🔐 **Write permissions** in `/usr/share/nginx/html/` are restricted to root. Always use `sudo nano`, `sudo cp`, or `sudo tee` when creating or editing files there.
+
+- 🌐 **`localStorage` is browser-scoped.** Snippet data is stored in the user's own browser and is not synced across devices or users. Clearing browser data will wipe saved snippets.
+
+---
+
+## 🧠 What I Learned
+
+- How to provision and connect to a cloud server on AWS from scratch
+- How Nginx serves static content and how to configure it for a custom domain
+- How SSL/TLS certificates work and how Let's Encrypt makes HTTPS free and accessible
+- How DNS routing ties a human-readable domain to a cloud-hosted server
+- How to deploy a production React build (Vite output) to a Linux web server
+
+---
+
+## 🚀 Future Improvements
+
+- 🔗 **Attach an Elastic IP** to eliminate the need to manually update Duck DNS after reboots
+- ⚙️ **CI/CD pipeline** to automatically deploy site changes on push (e.g. GitHub Actions)
+- 📊 **Monitoring & logging** for uptime and traffic visibility (e.g. AWS CloudWatch)
+- 🎨 Enhanced syntax highlighting for snippets to improve readability
+- ☁️ **Backend + database** to sync snippets across devices and users (replacing `localStorage`)
+- 🔑 **User authentication** to support personal snippet libraries per user
