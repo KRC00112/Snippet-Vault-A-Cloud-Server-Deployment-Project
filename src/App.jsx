@@ -1,8 +1,7 @@
 
 import './App.css'
 import {useState} from "react";
-
-
+import {useLocalStorage} from "usehooks-ts";
 
 
 function SnippetCardList({list,removeCard}){
@@ -27,7 +26,7 @@ function SnippetCardList({list,removeCard}){
                     </div>
                     <div className='date'>{formattedDate(new Date(obj.id))}</div>
                 </div>
-                <div className='right-card-snippet'>{obj.code}</div>
+                <pre className='right-card-snippet'>{obj.code}</pre>
                 <div className='snippet-operations'>
                     <button className='copy-btn' onClick={() => navigator.clipboard.writeText(obj.code)}>⧉ COPY</button>
                     <button className='delete-btn' onClick={()=>{removeCard(obj.id)}}>✕ DELETE</button>
@@ -104,7 +103,7 @@ function App() {
 
 
     let languageList = ['Select a language','JavaScript','Python','Java','C#','C','C++','TypeScript','PHP','Go','Swift'];
-    const [snippets,setSnippets]=useState([]);
+    const [snippets,setSnippets]=useLocalStorage('snippets',[]);
     const [query, setQuery] = useState('');
     const [focused, setFocused] = useState('');
 
